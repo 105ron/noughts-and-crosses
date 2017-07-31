@@ -23,4 +23,5 @@ gulp.task('browserSync', function() {
 gulp.task('watch', ['browserSync'], function() {
   gulp.watch('build/styles.css', ['styles']);
   gulp.watch('index.html', browserSync.reload);
+  gulp.watch('scripts/game.js', browserSync.reload);
 })
