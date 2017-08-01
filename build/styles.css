@@ -83,6 +83,13 @@ h1 {
 	visibility: visible !important;			
 }
 
+.fadeIn{
+	animation-name: fadeIn;
+	animation-duration: 1.5s;	
+	animation-timing-function: ease-in-out;	
+	visibility: visible !important;	
+}
+
 @keyframes bigEntrance {
 	0% {
 		transform: scale(0.3) rotate(6deg) translateX(-30%) translateY(30%);
@@ -112,13 +119,6 @@ h1 {
 		transform: scale(1) rotate(0deg) translateX(0%) translateY(0%);
 		opacity: 1;
 	}		
-}
-
-.fadeIn{
-	animation-name: fadeIn;
-	animation-duration: 1.5s;	
-	animation-timing-function: ease-in-out;	
-	visibility: visible !important;	
 }
 
 @keyframes fadeIn {
