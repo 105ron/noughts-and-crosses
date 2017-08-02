@@ -16,8 +16,10 @@ const gameGrid = () => {
   return grid;
 };
 
+//creates grid for the DOM
 gameSquare.insertAdjacentHTML('afterbegin', gameGrid().join(''));
 
+//adds div inside button to display 'x' or 'o' inside the browser
 const updateBoard = (x, y, player) => {
   const boardTags = {
     X: '<div class="cross bigEntrance"></div>',
@@ -27,6 +29,7 @@ const updateBoard = (x, y, player) => {
   clickedSquare.insertAdjacentHTML('afterbegin', boardTags[player]);
 };
 
+//check the clicked button hasn't already been given a nought or cross
 const isLegalMove = (x, y) => {
   return (gameState[x][y]) ? false : true;
 };
@@ -46,18 +49,23 @@ const gameLines = (gameArray) => {
   return gameLines;
 }
 
-const isWinner = (gameArray, playerToken) => {
-  let result = false;
-  gameLines(gameArray).forEach(gameLine => {
-    if (gameLine.every(gameSquare => (gameSquare === playerToken))) result = true;
-  });
-  return result;
-};
+const winnerOrDraw = (gameArray, playerToken) => {
+  const isWinner = () => {
+    let result = false;
+    gameLines(gameArray).forEach(gameLine => {
+      if (gameLine.every(gameSquare => (gameSquare === playerToken))) {
+        result = `Player ${ playerToken } is the winner`;
+      }
+    });
+    return result;
+  };
 
-const isDraw = (gameArray) => {
-  const flattenedGame = [].concat(...gameArray)
-  console.log(flattenedGame);
-  return !flattenedGame.includes(undefined);
+  const isDraw = () => {
+    const flattenedGame = [].concat(...gameArray)
+    console.log(flattenedGame);
+    if (!flattenedGame.includes(undefined)) return 'It\'s a draw';
+  };
+  return isWinner() || isDraw() || false;
 };
 
 
@@ -69,7 +77,7 @@ const gameClick = function gameClick() {
   if (isLegalMove(xPosition, yPosition)) {
     updateBoard(xPosition,yPosition, playerTurn);
     gameState[xPosition][yPosition] = playerTurn;
-    //(isWinner(gameState, playerTurn));
+    console.log(winnerOrDraw(gameState, playerTurn));
     playerTurnId.innerText = (playerTurn == 'X') ? 'O' : 'X';
   };
 };
