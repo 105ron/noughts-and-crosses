@@ -1,23 +1,9 @@
 'use strict';
 const rows = 3;
 const columns = 3;
-const gameSquare = document.getElementById('game-square');
 const gameSquares = document.getElementsByClassName('game-squares');
-let gameState = Array(...Array(rows)).map(() => Array(columns));
+let gameState;
 
-const gameGrid = () => {
-  const grid = Array.apply(null, Array(columns)).map( (x, xIndex) => { 
-    let row = Array.apply(null, Array(rows)).map( (y, yIndex) => {
-      return `<button class="game-squares pos${ xIndex }-${ yIndex }" 
-              data-x="${ xIndex }" data-y="${ yIndex }"></button>`;
-    });
-    return `${ row.join('') }`;
-  });
-  return grid;
-};
-
-//creates grid for the DOM
-gameSquare.insertAdjacentHTML('afterbegin', gameGrid().join(''));
 
 //adds div inside button to display 'x' or 'o' inside the browser
 const updateBoard = (x, y, player) => {
@@ -62,12 +48,10 @@ const winnerOrDraw = (gameArray, playerToken) => {
 
   const isDraw = () => {
     const flattenedGame = [].concat(...gameArray)
-    console.log(flattenedGame);
     if (!flattenedGame.includes(undefined)) return 'It\'s a draw';
   };
   return isWinner() || isDraw() || false;
 };
-
 
 const gameClick = function gameClick() {
   const xPosition = parseInt(this.getAttribute("data-x"));
@@ -76,12 +60,36 @@ const gameClick = function gameClick() {
   const playerTurn = playerTurnId.innerText;
   if (isLegalMove(xPosition, yPosition)) {
     updateBoard(xPosition,yPosition, playerTurn);
-    gameState[xPosition][yPosition] = playerTurn;
-    console.log(winnerOrDraw(gameState, playerTurn));
+    gameState[xPosition][yPosition] = playerTurn; //add the move to the gamestate array
+    const gameStatus = winnerOrDraw(gameState, playerTurn);
+    if (gameStatus) {
+      confirm(`${ gameStatus } Play another game?`);
+      startGame(); //restart game
+    }
     playerTurnId.innerText = (playerTurn == 'X') ? 'O' : 'X';
   };
 };
 
-Array.from(gameSquares).forEach(function(element) {
-  element.addEventListener('click', gameClick);
-});
+const startGame = () => {
+  //create grid, blank 2d array and add event listener
+  const gameSquare = document.getElementById('game-square');
+  gameState = Array(...Array(rows)).map(() => Array(columns));
+  const gameGrid = () => {
+    const grid = Array.apply(null, Array(columns)).map( (x, xIndex) => { 
+      let row = Array.apply(null, Array(rows)).map( (y, yIndex) => {
+        return `<button class="game-squares pos${ xIndex }-${ yIndex }" 
+                data-x="${ xIndex }" data-y="${ yIndex }"></button>`;
+      });
+      return `${ row.join('') }`;
+    });
+    return grid;
+  };
+  gameSquare.innerHTML = ''; //Clear container
+  //creates grid for the DOM
+  gameSquare.insertAdjacentHTML('afterbegin', gameGrid().join(''));
+  Array.from(gameSquares).forEach(function(element) {
+    element.addEventListener('click', gameClick);
+  });
+};
+
+startGame();
