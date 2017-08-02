@@ -8,6 +8,13 @@ h1 {
   text-align: center;
 }
 
+p {
+	text-align: center;
+	font-family: cursive;
+	margin-top: 30px;
+	font-size: 22px;
+}
+
 #game-square {
   height: 500px;
   width: 500px;
@@ -28,11 +35,11 @@ h1 {
 }
 
 [class*=" pos0-"],[class*=" pos1-"]{
-  border-right: 6px solid black;
+  border-bottom: 6px solid black;
 }
 
 [class$="-0"],[class$="-1"]{
-  border-bottom: 6px solid black;
+  border-right: 6px solid black;
 }
 
 .nought {
